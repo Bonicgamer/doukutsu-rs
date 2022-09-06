@@ -1,0 +1,37 @@
+app-id: io.github.doukutsurs.doukutsu-rs
+runtime: org.freedesktop.Platform
+runtime-version: '22.08'
+sdk: org.freedesktop.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.rust-stable
+command: doukutsu-rs
+finish-args:
+  - --device=all
+  - --socket=pulseaudio
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --env=CAVESTORY_DATA_DIR=/var/data/csdata #Idk if this is the correct way of doing this
+modules:
+  - name: d-rs
+    build-options:
+      append-path: "/usr/lib/sdk/rust-stable/bin"
+      env:
+        RUSTFLAGS: "-C link-arg=-s"
+        CARGO_HOME: "/run/build/d-rs/cargo"
+    buildsystem: simple
+    build-commands:
+      - cargo --offline fetch --manifest-path Cargo.toml
+      - cargo --offline build --release
+      - install -D -m 755 target/release/doukutsu-rs -t /app/bin/
+      - install -D -m 644 flatpak/io.github.doukutsurs.doukutsu-rs.desktop -t /app/share/applications/
+      #TODO: - install -D -m 644 flatpak/io.github.doukutsurs.doukutsu-rs.metainfo.xml -t /app/share/metainfo/
+      - install -D -m 644 app/app/src/main/res/mipmap-mdpi/ic_launcher.png /app/share/icons/hicolor/48x48/apps/io.github.doukutsurs.doukutsu-rs.png
+      - install -D -m 644 app/app/src/main/res/mipmap-hdpi/ic_launcher.png /app/share/icons/hicolor/72x72/apps/io.github.doukutsurs.doukutsu-rs.png
+      - install -D -m 644 app/app/src/main/res/mipmap-xhdpi/ic_launcher.png /app/share/icons/hicolor/96x96/apps/io.github.doukutsurs.doukutsu-rs.png
+      #- install -D -m 644 app/app/src/main/res/mipmap-xxhdpi/ic_launcher.png /app/share/icons/hicolor/144x144/apps/io.github.doukutsurs.doukutsu-rs.png
+      - install -D -m 644 app/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png /app/share/icons/hicolor/192x192/apps/io.github.doukutsurs.doukutsu-rs.png
+      - install -D -m 644 app/app/src/main/ic_launcher-playstore.png /app/share/icons/hicolor/512x512/apps/io.github.doukutsurs.doukutsu-rs.png
+    sources:
+      - type: "dir"
+        path: "../"
+      - gen-sources.json

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=doukuts-rs
+Comment=A faithful and open-source remake of Cave Story engine written in Rust
+Type=Application
+Exec=doukutsu-rs
+Terminal=false
+Keywords=Rust;Cave Story;
+Icon=io.github.doukutsurs.doukutsu-rs
+Categories=Game
+StartupNotify=true
